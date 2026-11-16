@@ -20,6 +20,11 @@ body {
   margin: 0;
 }
 
+#root {
+  width: min(calc(100% - 32px), 400px);
+  margin: 16px 0;
+}
+
 .container {
   width: 100%;
   max-width: 400px;
@@ -84,6 +89,10 @@ header h1 {
 }
 
 .cell {
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  min-width: 0;
   background-color: #0f172a;
   border-radius: 4px;
   display: flex;
@@ -95,12 +104,19 @@ header h1 {
   user-select: none;
 }
 
-.cell:hover:not(.taken) {
+.cell:hover:not(:disabled) {
   background-color: #334155;
 }
 
-.cell.taken {
+.cell:disabled {
   cursor: not-allowed;
+  opacity: 1;
+}
+
+.cell:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid #f8fafc;
+  outline-offset: 2px;
 }
 
 /* Colors for players */
