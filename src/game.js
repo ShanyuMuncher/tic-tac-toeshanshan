@@ -1,19 +1,34 @@
-const winningCombinations = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8],
-  [0, 3, 6], [1, 4, 7], [2, 5, 8],
-  [0, 4, 8], [2, 4, 6],
-];
-
-export function createBoard() {
-  return Array(9).fill('');
+export function createBoard(size = 3) {
+  return Array(size * size).fill('');
 }
 
 export function getGameStatus(board) {
-  for (const [a, b, c] of winningCombinations) {
-    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return { currentPlayer: null, isGameOver: true, message: `Player ${board[a]} Wins!` };
+  const size = Math.sqrt(board.length);
+
+  // A flat array stores each row after the previous one.
+  // Moving across a row adds 1; moving down a column adds size.
+  function checkLine(start, step) {
+    const player = board[start];
+    if (!player) return false;
+
+    for (let offset = 1; offset < size; offset++) {
+      if (board[start + offset * step] !== player) return false;
     }
+    return true;
   }
+
+  function winResult(index) {
+    return { currentPlayer: null, isGameOver: true, message: `Player ${board[index]} Wins!` };
+  }
+
+  for (let index = 0; index < size; index++) {
+    if (checkLine(index * size, 1)) return winResult(index * size);
+    if (checkLine(index, size)) return winResult(index);
+  }
+
+  // The two diagonals step down-right and down-left respectively.
+  if (checkLine(0, size + 1)) return winResult(0);
+  if (checkLine(size - 1, size - 1)) return winResult(size - 1);
 
   if (!board.includes('')) {
     return { currentPlayer: null, isGameOver: true, message: "It's a Tie!" };

@@ -71,3 +71,60 @@ test('restarting produces a fresh empty board with X to play', () => {
   assert.equal(getGameStatus(restartedBoard).isGameOver, false);
   assert.equal(getGameStatus(restartedBoard).currentPlayer, 'X');
 });
+
+for (const size of [3, 4, 5]) {
+  test(`${size}x${size}: every complete row, column, and diagonal wins`, () => {
+    const lines = [];
+    for (let row = 0; row < size; row++) {
+      lines.push(Array.from({ length: size }, (_, column) => row * size + column));
+    }
+    for (let column = 0; column < size; column++) {
+      lines.push(Array.from({ length: size }, (_, row) => row * size + column));
+    }
+    lines.push(Array.from({ length: size }, (_, index) => index * size + index));
+    lines.push(Array.from({ length: size }, (_, index) => index * size + size - 1 - index));
+
+    for (const line of lines) {
+      for (const player of ['X', 'O']) {
+        const board = createBoard(size);
+        assert.equal(board.length, size * size);
+        line.forEach(index => { board[index] = player; });
+        assert.equal(getGameStatus(board).message, `Player ${player} Wins!`);
+        const emptyIndex = board.indexOf('');
+        assert.equal(playMove(board, emptyIndex), board);
+        // Removing one mark makes this an incomplete line.
+        board[line[0]] = '';
+        assert.equal(getGameStatus(board).isGameOver, false);
+      }
+    }
+  });
+}
+
+test('larger full boards without a winning line are draws', () => {
+  for (const rows of [
+    ['XXOO', 'OOXX', 'XXOO', 'OOXX'],
+    ['XXOOX', 'OOXXO', 'XXOOX', 'OOXXO', 'XOXOX'],
+  ]) {
+    const board = rows.join('').split('');
+    assert.equal(getGameStatus(board).message, "It's a Tie!");
+    assert.equal(playMove(board, 0), board);
+  }
+});
+
+test('three marks on a larger board do not win, including across a row boundary', () => {
+  for (const positions of [[0, 1, 2], [2, 3, 4], [0, 4, 8]]) {
+    const board = createBoard(4);
+    positions.forEach(index => { board[index] = 'X'; });
+    assert.equal(getGameStatus(board).isGameOver, false);
+  }
+});
+
+test('changing board size starts an empty game with X', () => {
+  for (const size of [5, 4, 3]) {
+    const board = createBoard(size);
+    assert.equal(board.length, size * size);
+    assert.ok(board.every(cell => cell === ''));
+    assert.equal(getGameStatus(board).currentPlayer, 'X');
+    assert.equal(playMove(board, size * size - 1)[size * size - 1], 'X');
+  }
+});
