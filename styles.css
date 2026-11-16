@@ -75,12 +75,12 @@ header h1 {
 }
 
 /* ==========================================================================
-   Game Board (3x3 Grid)
+   Game Board (variable-size grid)
    ========================================================================== */
 .board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(var(--board-size, 3), 1fr);
+  grid-template-rows: repeat(var(--board-size, 3), 1fr);
   gap: 8px;
   background-color: #1e293b;
   padding: 8px;
@@ -98,7 +98,7 @@ header h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 4rem;
+  font-size: clamp(1.5rem, calc(12rem / var(--board-size, 3)), 4rem);
   font-weight: bold;
   cursor: pointer;
   user-select: none;
@@ -114,7 +114,8 @@ header h1 {
 }
 
 .cell:focus-visible,
-.btn:focus-visible {
+.btn:focus-visible,
+select:focus-visible {
   outline: 3px solid #f8fafc;
   outline-offset: 2px;
 }
@@ -122,3 +123,25 @@ header h1 {
 /* Colors for players */
 .cell.x { color: #f43f5e; }
 .cell.o { color: #3b82f6; }
+
+.size-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+select {
+  padding: 8px;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #f8fafc;
+  font: inherit;
+}
+
+.rules {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

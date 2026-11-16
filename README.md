@@ -1,8 +1,12 @@
 # Tic-Tac-Toe
 
 A two-player tic-tac-toe game built with React and Vite. X starts each game.
-Players alternate until someone wins or the board is full. Restart Game clears
-the board and starts a new game.
+Players alternate until someone wins or the board is full. Choose 3 × 3, 4 × 4, or 5 × 5. Win by filling a complete row, column, or
+diagonal with your mark. Changing size starts a fresh game; Restart Game
+clears the board while keeping its size.
+
+The `main` branch contains the vanilla JavaScript version; `react-refactor`
+contains this React version.
 
 ## Run locally
 
