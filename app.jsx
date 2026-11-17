@@ -26,12 +26,10 @@ function App() {
       return;
     }
 
-    // Copy the array before changing it: do not edit React state directly.
     const newBoard = board.slice();
     newBoard[cellIndex] = currentPlayer;
     setBoard(newBoard);
 
-    // Check the new copy because board still holds this render's old value.
     if (checkWin(newBoard)) {
       setStatusMessage('Player ' + currentPlayer + ' Wins!');
       setIsGameActive(false);
@@ -119,7 +117,6 @@ function App() {
     resetGame(newSize);
   }
 
-  // This loop replaces createElement and appendChild from initGame.
   const cells = [];
   for (let i = 0; i < board.length; i++) {
     cells.push(
@@ -133,7 +130,6 @@ function App() {
     );
   }
 
-  // JSX looks like HTML. Curly braces insert JavaScript values.
   return (
     <div className="container">
       <header>
@@ -165,6 +161,5 @@ function App() {
   );
 }
 
-// Start React inside the empty root div from index.html.
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
